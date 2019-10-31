@@ -4,9 +4,9 @@ import UserPageTemplate from 'templates/UserPageTemplate';
 class ProjectDetails extends Component {
   state = {
     activeItem: {
-      id: '',
-      name: '',
-      status: ''
+      id: '100',
+      name: 'Project name ',
+      status: 'Completed'
     }
   }
 
