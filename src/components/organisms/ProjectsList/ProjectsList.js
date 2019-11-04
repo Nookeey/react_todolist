@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TableItem from '../../molecules/TableItem/TabelItem'
+import ProjectListItem from '../../molecules/ProjectListItem/ProjectListItem'
 
 class ProjectsList extends Component {
   
@@ -10,7 +10,7 @@ class ProjectsList extends Component {
     return (
       // eslint-disable-next-line react/prop-types
       projects.map(({ id, name, status}) => (
-        <TableItem 
+        <ProjectListItem 
           id={id}
           name={name}
           status={status}

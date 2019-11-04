@@ -28,6 +28,7 @@ const StyledButton = styled.button`
   }
 `;
 
+// eslint-disable-next-line react/prop-types
 const Projects = ({ projects }) => (
   <UserPageTemplate>
     <StyledWrapper>
@@ -45,9 +46,6 @@ const Projects = ({ projects }) => (
   </UserPageTemplate>
 )
 
-const mapStateToProps = state => {
-  const { projects } = state;
-  return { projects }
-}
+const mapStateToProps = ({ projects }) => ({ projects })
 
 export default connect(mapStateToProps)(Projects)
