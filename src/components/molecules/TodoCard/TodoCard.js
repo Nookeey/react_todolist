@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import TodoItem from 'components/atoms/TodoItem/TodoItem';
@@ -27,19 +27,28 @@ const StyledTitle = styled.h1`
   font-weight: 600;
 `;
 
-const TodoCard = ({ cardType, todo }) => (
-  <StyledWrapper cardType={cardType}>
-    <StyledTitle>
-      {cardType}
-    </StyledTitle>
-    {todo.map(({ id, content }) => (
-      <TodoItem 
-        content={content}
-        key={id}
-      />
-    ))}
-  </StyledWrapper>
-)
+class TodoCard extends Component {
+
+  handelTodoItemClick = (id, projectId, status) => {
+    const { handelTodoCardChildClick } = this.props
+    handelTodoCardChildClick(id, projectId, status);
+  }
+
+  render() {
+    const { cardType, todo } = this.props;
+
+    return (  
+      <StyledWrapper cardType={cardType}>
+        <StyledTitle>
+          {cardType}
+        </StyledTitle>
+        {todo.map(({ id, content, projectId, status }) => (
+          <TodoItem onClick={() => this.handelTodoItemClick(id, projectId, status)} key={id}>{content}</TodoItem>
+        ))}
+      </StyledWrapper>
+    )
+  }
+}
 
 TodoCard.propTypes = {
   cardType: PropTypes.string.isRequired,
@@ -47,6 +56,7 @@ TodoCard.propTypes = {
     id: PropTypes.number.isRequired,
     content: PropTypes.string.isRequired,
   })).isRequired,
+  handelTodoCardChildClick: PropTypes.func.isRequired
 }
 
 export default TodoCard;

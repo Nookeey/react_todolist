@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ProjectListItem from '../../molecules/ProjectListItem/ProjectListItem'
 
 class ProjectsList extends Component {
   
   render() {
-    // eslint-disable-next-line react/prop-types
     const { projects } = this.props
 
     return (
-      // eslint-disable-next-line react/prop-types
       projects.map(({ id, name, status}) => (
         <ProjectListItem 
           id={id}
@@ -20,6 +19,14 @@ class ProjectsList extends Component {
     );
   }
 
+}
+
+ProjectsList.propTypes = {
+  projects: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    status: PropTypes.bool.isRequired
+  })).isRequired
 }
 
 export default ProjectsList;

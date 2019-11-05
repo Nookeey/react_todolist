@@ -1,8 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const StyledWrapper = styled.div`
+const TodoItem = styled.div`
   display: block;
   width: 100%;
   padding: 15px;
@@ -17,15 +15,5 @@ const StyledWrapper = styled.div`
     cursor: pointer;
   }
 `;
-
-const TodoItem = ({ content }) => (
-  <StyledWrapper>
-    { content }
-  </StyledWrapper>
-);
-
-TodoItem.propTypes = {
-  content: PropTypes.string.isRequired
-}
 
 export default TodoItem;

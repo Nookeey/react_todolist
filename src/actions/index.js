@@ -19,3 +19,19 @@ export const getTodosByProjectId = (id) => ({
     id
   }
 })
+
+export const changeTodoItemStatus = (id, projectId, status) => ({
+  type: 'CHANGE_TODO_ITEM_STATUS',
+  payload: {
+    id,
+    projectId,
+    status
+  }
+})
+
+export const addProject = (name) => ({
+  type: 'ADD_PROJECT',
+  payload: {
+    name
+  }
+})

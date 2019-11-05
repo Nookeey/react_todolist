@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import UserPageTemplate from 'templates/UserPageTemplate';
 import styled from 'styled-components';
 import TodoCard from 'components/molecules/TodoCard/TodoCard'
+import { changeTodoItemStatus as changeTodoItemStatusAction } from 'actions';
 
 const StyledWrapper = styled.div`
 
@@ -28,27 +29,29 @@ class ProjectDetails extends Component {
       name: '',
       status: ''
     },
-    todosPending: [],
-    todosCompleted: [],
-    todosInProgress: []
+    todo: []
   }
 
   componentDidMount() {
-    const { activeItem, todos } = this.props 
+    const { activeItem, todo } = this.props 
     if (activeItem) {
-      const activeItemO = activeItem;
-      this.setState({ activeItem: activeItemO });
+      this.setState({ activeItem });
     }
-    if (todos) {
-      const todosPending = todos.filter(item => item.status === 'Pending')
-      const todosCompleted = todos.filter(item => item.status === 'Completed')
-      const todosInProgress = todos.filter(item => item.status === 'In Progress')
-      this.setState({ todosPending, todosCompleted, todosInProgress })
+    if (todo) { 
+      this.setState({todo})
     }
   }
 
+  handelTodoCardChildData = (id, projectId, status) => {
+    const { changeTodoItemStatus } = this.props
+    changeTodoItemStatus(id, projectId, status)
+  }
+
   render() {
-    const { activeItem, todosPending, todosCompleted, todosInProgress } = this.state
+    const { activeItem, todo } = this.state
+    const todosPending = todo.filter(item => item.status === 'Pending')
+    const todosInProgress = todo.filter(item => item.status === 'In Progress')
+    const todosCompleted = todo.filter(item => item.status === 'Completed')
     
     return (
       <UserPageTemplate>
@@ -59,9 +62,9 @@ class ProjectDetails extends Component {
             <div>{ activeItem.status ? 'true' : 'false' }</div>
           </StyledProjectInfo>
           <StyledTodosWrapper>
-            <TodoCard cardType="Pending" todo={todosPending} />
-            <TodoCard cardType="In Progress" todo={todosInProgress} />
-            <TodoCard cardType="Completed" todo={todosCompleted} />
+            <TodoCard cardType="Pending" todo={todosPending} handelTodoCardChildClick={this.handelTodoCardChildData} />
+            <TodoCard cardType="In Progress" todo={todosInProgress} handelTodoCardChildClick={this.handelTodoCardChildData} />
+            <TodoCard cardType="Completed" todo={todosCompleted} handelTodoCardChildClick={this.handelTodoCardChildData} />
           </StyledTodosWrapper>
         </StyledWrapper>
       </UserPageTemplate>
@@ -75,17 +78,22 @@ ProjectDetails.propTypes = {
     name: PropTypes.string.isRequired,
     status: PropTypes.bool.isRequired,
   })).isRequired,
-  todos: PropTypes.arrayOf(PropTypes.shape({
+  todo: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     content: PropTypes.string.isRequired,
     projectId: PropTypes.number.isRequired,
     status: PropTypes.string.isRequired,
   })).isRequired,
+  changeTodoItemStatus: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => ({
   activeItem: state.projects.filter(item => item.id === parseInt(ownProps.match.params.id, 10)),
-  todos: state.todos.filter(item => item.projectId === parseInt(ownProps.match.params.id, 10))
+  todo: state.todos.filter(item => item.projectId === parseInt(ownProps.match.params.id, 10))
 });
 
-export default connect(mapStateToProps)(ProjectDetails);
+const mapDispatchToProps = (dispatch) => ({
+  changeTodoItemStatus: (id, status, projectId) => dispatch(changeTodoItemStatusAction(id, status, projectId))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetails);

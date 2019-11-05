@@ -1,9 +1,11 @@
 /* eslint-disable import/no-unresolved */
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import UserPageTemplate from 'templates/UserPageTemplate';
 import styled from 'styled-components';
 import ProjectsList from '../components/organisms/ProjectsList/ProjectsList';
+import AddProject from '../components/molecules/AddProject/AddProject'
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -28,9 +30,9 @@ const StyledButton = styled.button`
   }
 `;
 
-// eslint-disable-next-line react/prop-types
 const Projects = ({ projects }) => (
   <UserPageTemplate>
+    <AddProject />
     <StyledWrapper>
       <StyledButton>
         All
@@ -45,6 +47,14 @@ const Projects = ({ projects }) => (
     <ProjectsList projects={projects} />
   </UserPageTemplate>
 )
+
+Projects.propTypes = {
+  projects: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    status: PropTypes.bool.isRequired
+  })).isRequired
+}
 
 const mapStateToProps = ({ projects }) => ({ projects })
 
