@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import TodoItem from 'components/atoms/TodoItem/TodoItem';
+import AddTodo from 'components/molecules/AddTodo/AddTodo';
 
 const bgColors = {
   'Pending': '#0091EA',
@@ -15,6 +17,7 @@ const StyledWrapper = styled.div`
   justify-content: flex-start;
   flex-direction: column;
   background-color: ${({ cardType }) => (cardType && bgColors[cardType])};
+  /* background-color: #eee; */
   padding: 15px;
 `;
 
@@ -28,23 +31,23 @@ const StyledTitle = styled.h1`
 `;
 
 class TodoCard extends Component {
-
   handelTodoItemClick = (id, projectId, status) => {
     const { handelTodoCardChildClick } = this.props
     handelTodoCardChildClick(id, projectId, status);
   }
 
   render() {
-    const { cardType, todo } = this.props;
+    const { cardType, todo, projectId } = this.props;
 
     return (  
       <StyledWrapper cardType={cardType}>
         <StyledTitle>
           {cardType}
         </StyledTitle>
-        {todo.map(({ id, content, projectId, status }) => (
+        {todo.map(({ id, content, status }) => (
           <TodoItem onClick={() => this.handelTodoItemClick(id, projectId, status)} key={id}>{content}</TodoItem>
         ))}
+        { cardType === 'Pending' && ( <AddTodo projectId={projectId}/> ) }
       </StyledWrapper>
     )
   }
@@ -55,8 +58,19 @@ TodoCard.propTypes = {
   todo: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     content: PropTypes.string.isRequired,
-  })).isRequired,
-  handelTodoCardChildClick: PropTypes.func.isRequired
+    projectId: PropTypes.number.isRequired,
+    status: PropTypes.string.isRequired
+  })),
+  handelTodoCardChildClick: PropTypes.func.isRequired,
+  projectId: PropTypes.number.isRequired
 }
 
-export default TodoCard;
+TodoCard.defaultProps = {
+  todo: [],
+};
+
+const mapStateToProps = (state, ownProps) =>  ({
+  todo: state.todos.filter(item => (item.projectId === parseInt(ownProps.projectId, 10) && item.status === ownProps.cardType))
+});
+
+export default connect(mapStateToProps)(TodoCard);

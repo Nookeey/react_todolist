@@ -7,11 +7,12 @@ const Input = styled.input`
   padding: 4px 15px;
   margin: 0;
   width: 100%;
+  background-color: transparent;
 
-   &:active,
-   &:focus {
-     outline: none
-   }
+  &:active,
+  &:focus {
+    outline: none
+  }
 `;
 
 export default Input;

@@ -1,3 +1,12 @@
+import {
+  ADD_PROJECT_SUCCESS,
+  REMOVE_PROJECT_SUCCESS,
+  FETCH_TODO_SUCCESS,
+  ADD_TODO_SUCCESS,
+  REMOVE_TODO_SUCCESS,
+  CHANGE_TODO_ITEM_STATUS_SUCCESS
+} from 'actions';
+
 const initaialState = {
   projects: [
     { id: 1, name: "Project name 1", status: true },
@@ -23,38 +32,40 @@ const initaialState = {
 
 const rootReducer = (state = initaialState, action) => {
   switch (action.type) {
-    case ('REMOVE_ITEM'):
+    case ADD_PROJECT_SUCCESS:
+      return {
+        ...state,
+        projects: [...state.projects, { id: 3, name: action.payload.name, status: false }]
+      }
+    case REMOVE_PROJECT_SUCCESS:
       return {
         ...state,
         projects: [
           ...state.projects.filter(item => item.id !== action.payload.id)
         ]
       }
-    case ('GET_ITEM_BY_ID'):
-      return {
-        ...state,
-        projects: [
-          ...state.projects.filter(item => item.id === action.payload.id)
-        ]
-      }
-    case ('GET_TODOS_BY_PROJECT_ID'):
+    case FETCH_TODO_SUCCESS:
       return {
         ...state,
         todos: [
-          ...state.todos.filter(item => item.projectId === action.payload.id)
+          ...state.todos.filter(item => item.projectId === action.payload.projectId)
         ]
       }
-    case ('CHANGE_TODO_ITEM_STATUS'):
+    case ADD_TODO_SUCCESS:
+      return {
+        ...state,
+        todos: [...state.todos, { id: 80, content: action.payload.content, projectId: action.payload.projectId, status: 'Pending' }]
+      }
+    case REMOVE_TODO_SUCCESS:
+      return state
+    case CHANGE_TODO_ITEM_STATUS_SUCCESS:
       return {
         ...state,
         todos: [
           ...state.todos.map(item => {
             if (item.projectId === action.payload.projectId && item.id === action.payload.id) {
-              if (item.status === 'Pending') {
-                item.status = 'In Progress'
-              } else if (item.status === 'In Progress') {
-                item.status = 'Completed'
-              }
+              // eslint-disable-next-line no-param-reassign
+              item.status = action.payload.status
               return item
             }
             return item

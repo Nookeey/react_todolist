@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import UserPageTemplate from 'templates/UserPageTemplate';
 import styled from 'styled-components';
 import ProjectsList from '../components/organisms/ProjectsList/ProjectsList';
-import AddProject from '../components/molecules/AddProject/AddProject'
+import AddProject from '../components/molecules/AddProject/AddProject';
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -53,8 +53,12 @@ Projects.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     status: PropTypes.bool.isRequired
-  })).isRequired
+  }))
 }
+
+Projects.defaultProps = {
+  projects: [],
+};
 
 const mapStateToProps = ({ projects }) => ({ projects })
 

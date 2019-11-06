@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { removeItem as removeItemAction } from 'actions';
+import { removeProject as removeProjectAction } from 'actions';
 
 const StyledWrapper = styled.div`
   display: grid;
@@ -61,7 +61,7 @@ class ProjectListItem extends Component {
   handleProjectListItemClick = () => this.setState({ redirect: true });
 
   render() {
-    const { id, name, status, removeItem } = this.props;
+    const { id, name, status, removeProject } = this.props;
     const { redirect } = this.state;
     
     if (redirect) {
@@ -69,6 +69,7 @@ class ProjectListItem extends Component {
     }
 
     return (
+      
       <StyledWrapper status={status}>
         <StyledId>
           {id}
@@ -80,7 +81,7 @@ class ProjectListItem extends Component {
           {status}
         </StyledStatus>
         <StyledActions>
-          <StyledActionButton onClick={() => removeItem(id)}>D</StyledActionButton>
+          <StyledActionButton onClick={() => removeProject(id)}>D</StyledActionButton>
         </StyledActions>
       </StyledWrapper>
     );
@@ -92,11 +93,11 @@ ProjectListItem.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   status: PropTypes.bool.isRequired,
-  removeItem: PropTypes.func.isRequired
+  removeProject: PropTypes.func.isRequired
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  removeItem: (id) => dispatch(removeItemAction(id))
+  removeProject: (id) => dispatch(removeProjectAction(id))
 })
 
 export default connect(null, mapDispatchToProps)(ProjectListItem);
